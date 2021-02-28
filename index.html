@@ -13,6 +13,10 @@
 
 <body scroll="no" style="overflow: hidden; overscroll-behavior: none; background:#64AAB4; font-family:'Roboto thin', 'Lucida Sans', 'Arial'">
 	<style>
+		.btn 
+		{
+			font-size:200%;
+		}
 	</style>
 	<div>
 		<div id='switch_view'>switch between dashboard & counter</div>
@@ -23,9 +27,9 @@
 			place id (any alphanumeric string - eg : gate1): <input id='placeid'> <br>
 
 			<div id='current'></div>
-			<div id='plus'>+</div>
-			<div id='minus'>-</div>
-			<div id='zero'>0</div>
+			<div class='btn' id='plus'>+</div>
+			<div class='btn' id='minus'>-</div>
+			<div class='btn' id='zero'>0</div>
 		</div>
 		<div id="page2" 	style="display:none">
 			table (placeid, number, last update (human readable), last update (ms - hidden))
@@ -68,6 +72,7 @@
 	var ns = {};
 	var n  = 0;
 	var LOCAL_TALLY_N = window.localStorage.getItem('TALLY_N');
+
 	if (LOCAL_TALLY_N != null)
 	{
 		n = LOCAL_TALLY_N;
@@ -96,7 +101,7 @@
 	{
 		pubnub_initialize(TALLY_PUBNUB_S_KEY, TALLY_PUBNUB_P_KEY);
 
-		if (eventid ! null) pubnub.subscribe({channels: [eventid + '#live']});
+		if (eventid != null) pubnub.subscribe({channels: [eventid + '#live']});
 	}
 
 	$('#pubnubkey').on('change', function()
@@ -145,7 +150,6 @@
 				// update tableau
 			}
 		});
-
 	}
 		
 	load_history();
