@@ -89,7 +89,7 @@
 
 		window.localStorage.setItem('TALLY_N', 0);
 		
-		publish('live', { eventid:eventid,   placeid:placeid, n:n, ts:Date.now() } );
+		publish('live', { eventid:eventid,   placeid:placeid, n:n} );
 	}
 
 	var pubnub 		= null;
@@ -190,11 +190,13 @@
 
 							if (ns[placeid] == null)
 							{
-								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].entry.ts};
+								console.log('A')
+								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].timetoken};
 							}
-							else if (ns[placeid].ts < rm[i].entry.ts )
+							else if (ns[placeid].ts < rm[i].timetoken )
 							{
-								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].entry.ts};
+								console.log('B')
+								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].timetoken};
 							}
 						}	
 			       		  }
