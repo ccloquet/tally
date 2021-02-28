@@ -204,7 +204,7 @@
 						{
 							if (ns.hasOwnProperty(placeid))
 							{
-			       					var dt = new Date (ns[placeid].ts)
+			       					var dt = new Date (ns[placeid].ts/1000)
 							       	html += '<tr ts='+ns[placeid].ts+'><td>' + placeid + '</td><td>' + ns[placeid].n + '</td><td>' + dt + '</td></tr>';
 							}
 						}
