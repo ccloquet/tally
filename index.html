@@ -35,7 +35,6 @@
 </body>
 
 <script type="text/javascript" src="js/pubnub.4.21.5.min.js"></script>
-<script type="text/javascript" src="params.js"></script>		<!-- after pubnub.js-->
 <script type="text/javascript" src="helpers.js"></script> 		<!-- should install only what is needed-->
 <script	type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="						  	crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/offline-0.7.14/offline.min.js"></script>
@@ -44,9 +43,9 @@
 
 <script>
 
-	$('#plus').on(		'click', 	plus);
-	$('#minus').on(		'click', 	minus);
-	$('#zero').on(		'click', 	zero);
+	$('#plus').on(		'click', 	function ()	{ publish_number(++n);	});
+	$('#minus').on(		'click', 	function ()	{ publish_number(--n);	});
+	$('#zero').on(		'click', 	function ()	{ publish_number(0);	});
 	$('#switch_view').on(	'click', 	switch_view);
 
 	var myver		= '0.1';
@@ -77,12 +76,6 @@
 	{
 		window.localStorage.setItem('TALLY_N', 0);
 	}
-
-	// get from localStorage
-
-	function ()	{	publish_number(++n);	}
-	function ()	{	publish_number(--n);	}
-	function ()	{	publish_number(0);	}
 
 	function publish_number(m)	
 	{
