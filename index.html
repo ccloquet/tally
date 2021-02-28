@@ -25,7 +25,7 @@
 		}
 	</style>
 	<div>
-		<div id='switch_view'>switch between dashboard & counter</div>
+		<div class='btn' id='switch_view'>switch between dashboard & counter</div>
 		pubnub key (to be scanned by QR code): <input id='pubnubkey'> <br>
 		event id (any alphanumeric string - eg: werchter2020): <input id='eventid'> <br>
 
@@ -157,8 +157,13 @@
 			
 				//console.log(m)
 				
-				ns[placeid] = {n:m.message.n, ts:m.timetoken}
-				var dt   = new Date (ns[placeid].ts/1000)
+				if (ns[placeid] == null)
+				{
+					$('#dashboard tr:last').after('<tr><td>' + placeid + '</td><td id="n_'+placeid+'">0</td><td id="dt_'+placeid+'"></td></tr>')
+				}
+
+				ns[placeid] 	= {n:m.message.n, ts:m.timetoken}
+				var dt   	= new Date (ns[placeid].ts/1000)
 
 				$('#n_'+placeid).text(ns[placeid].n)
 				$('#dt_'+placeid).text(dt)
