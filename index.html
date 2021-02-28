@@ -102,6 +102,8 @@
 		pubnub_initialize(TALLY_PUBNUB_S_KEY, TALLY_PUBNUB_P_KEY);
 
 		if (eventid != null) pubnub.subscribe({channels: [eventid + '#live']});
+
+		load_history();
 	}
 
 	$('#pubnubkey').on('change', function()
@@ -152,8 +154,6 @@
 		});
 	}
 		
-	load_history();
-
 	function load_history()
 	{
 		getAllMessages(0);
