@@ -180,26 +180,20 @@
 	
 					if ((rm != "undefined") & (rm.length > 0))
 					{		
-						console.log('W')
 						// grouper par placeid et prendre le dernier (temporel)
 			
 						for (var i=rm.length; i>=0; --i)
 						{
-							console.log('X')
 							if (rm[i].entry.eventid != eventid) continue;
 
-							console.log('Z')
 							var placeid = rm[i].entry.placeid;
 
-							console.log('C')
 							if (ns[placeid] == null)
 							{
-								console.log('A')
 								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].timetoken};
 							}
 							else if (ns[placeid].ts < rm[i].timetoken )
 							{
-								console.log('B')
 								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].timetoken};
 							}
 						}	
