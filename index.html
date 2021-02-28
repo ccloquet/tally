@@ -117,7 +117,7 @@
 		window.localStorage.setItem('TALLY_PUBNUB_S_KEY', TALLY_PUBNUB_S_KEY);
 		window.localStorage.setItem('TALLY_PUBNUB_P_KEY', TALLY_PUBNUB_P_KEY);
 
-		pubnub_initialize(subscribeKey, publishKey)
+		pubnub_initialize(TALLY_PUBNUB_S_KEY, TALLY_PUBNUB_P_KEY)
 	})
 
 	$('#eventid').on('change', function()
