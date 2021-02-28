@@ -178,13 +178,12 @@
 	
 					console.log('FETCH HISTORY: ', rm, rm.length, start- 1.5653e16, end- 1.5653e16)
 	
-					console.log('T')
 					if ((rm != "undefined") & (rm.length > 0))
 					{		
 						console.log('W')
 						// grouper par placeid et prendre le dernier (temporel)
 			
-						for (var i=rm.length-1; i>=1; --i)
+						for (var i=rm.length; i>=0; --i)
 						{
 							console.log('X')
 							if (rm.entry.eventid != eventid) continue;
