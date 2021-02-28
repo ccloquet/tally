@@ -33,7 +33,7 @@
 		}
 	</style>
 	<div>
-		<div class='btn' id='switch_view' style='display:inline'>switch dashboard <-> counter</div><br>
+		<div class='btn' id='switch_view' style='display:inline'>switch dashboard <-> counter</div><br><br>
 		pubnub key (later via QR code?): <input id='pubnubkey'> <br>
 		event id (eg: werchter2020): <input id='eventid'> <br>
 
@@ -92,10 +92,12 @@
 	if (LOCAL_TALLY_N != null)
 	{
 		n = LOCAL_TALLY_N;
+		$('#current').text(n);
 	}
 	else
 	{
 		window.localStorage.setItem('TALLY_N', 0);
+		$('#current').text(0);
 	}
 
 	function publish_number(m)	
@@ -174,7 +176,7 @@
 
 				ns[placeid] 	= {n:m.message.n, ts:m.timetoken}
 				var dt   	= new Date (ns[placeid].ts/1000)
-
+console.log(dt)
 				$('#n_'+placeid).text(ns[placeid].n)
 				$('#dt_'+placeid).text(dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString())
 
