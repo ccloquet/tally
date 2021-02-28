@@ -200,13 +200,17 @@
 						}	
 						console.log(ns)
 
+						var html = '<table>';
 						for (var placeid in ns)
 						{
 							if (ns.hasOwnProperty(placeid))
 							{
-								console.log('<tr><td>' + placeid + '</td><td>' + ns[placeid].n + '</td></tr>')
+			       					var dt = new Date (ns[placeid].ts)
+							       	table += '<tr ts='+ns[placeid].ts+'><td>' + placeid + '</td><td>' + ns[placeid].n + '</td><td>' + dt + '</td></tr>';
 							}
 						}
+						html += '</table>';
+			       			$('#page2').html(table)
 			       		  }
 					} // status.error
 				}// function (status, message)
