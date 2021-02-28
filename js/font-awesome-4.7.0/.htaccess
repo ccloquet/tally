@@ -1,0 +1,5 @@
+<IfModule mod_headers.c>
+  Header set Cache-Control ""
+  Header set Pragma ""
+  Header set Expires 0
+</IfModule>

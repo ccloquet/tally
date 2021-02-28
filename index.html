@@ -1,0 +1,226 @@
+<html>
+<head>
+	<title>TalLy</title>
+	<meta charset="utf-8" />
+	<meta name="referrer" content="no-referrer">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="js/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="js/offline-0.7.14/offline-theme-default.css">
+	<link rel="stylesheet" href="js/offline-0.7.14/offline-language-english.css">
+	<link rel="stylesheet" href="js/material.css">
+	<link rel="stylesheet" href="js/plus.css">
+</head>
+
+<body scroll="no" style="overflow: hidden; overscroll-behavior: none; background:#64AAB4; font-family:'Roboto thin', 'Lucida Sans', 'Arial'">
+	<style>
+	</style>
+	<div>
+		<div id='switch_view'>switch between dashboard & counter</div>
+		pubnub key (to be scanned by QR code): <input id='pubnubkey'> <br>
+		event id (any alphanumeric string - eg: werchter2020): <input id='eventid'> <br>
+
+		<div id="page1" 	style="display:block">
+			place id (any alphanumeric string - eg : gate1): <input id='placeid'> <br>
+
+			<div id='current'></div>
+			<div id='plus'>+</div>
+			<div id='minus'>-</div>
+			<div id='zero'>0</div>
+		</div>
+		<div id="page2" 	style="display:none">
+			table (placeid, number, last update (human readable), last update (ms - hidden))
+		</div>
+	</div>
+
+</body>
+
+<script type="text/javascript" src="js/pubnub.4.21.5.min.js"></script>
+<script type="text/javascript" src="params.js"></script>		<!-- after pubnub.js-->
+<script type="text/javascript" src="helpers.js"></script> 		<!-- should install only what is needed-->
+<script	type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="						  	crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/offline-0.7.14/offline.min.js"></script>
+<script type="text/javascript" src="js/download2.js"></script>
+<script type="text/javascript" src="js/push.js-1.0.9/bin/push.js"></script>
+
+<script>
+
+	$('#plus').on(		'click', 	plus);
+	$('#minus').on(		'click', 	minus);
+	$('#zero').on(		'click', 	zero);
+	$('#switch_view').on(	'click', 	switch_view);
+
+	var myver		= '0.1';
+
+	var eventid    		= null; 
+	var placeid    		= null; 
+
+	var LOCAL_TALLY_EVENTID = window.localStorage.getItem('TALLY_EVENTID');
+	var LOCAL_TALLY_PLACEID = window.localStorage.getItem('TALLY_PLACEID');
+
+	if (LOCAL_TALLY_EVENTID != null) { eventid = LOCAL_TALLY_EVENTID; $('#eventid').val(LOCAL_TALLY_EVENTID); };
+	if (LOCAL_TALLY_PLACEID != null) { placeid = LOCAL_TALLY_PLACEID; $('#placeid').val(LOCAL_TALLY_PLACEID); };
+
+	function switch_view()
+	{
+		$('#page1').toggle();
+		$('#page2').toggle();
+	}
+
+	var ns = {};
+	var n  = 0;
+	var LOCAL_TALLY_N = window.localStorage.getItem('TALLY_N');
+	if (LOCAL_TALLY_N != null)
+	{
+		n = LOCAL_TALLY_N;
+	}
+	else
+	{
+		window.localStorage.setItem('TALLY_N', 0);
+	}
+
+	// get from localStorage
+
+	function ()	{	publish_number(++n);	}
+	function ()	{	publish_number(--n);	}
+	function ()	{	publish_number(0);	}
+
+	function publish_number(m)	
+	{
+		n  	= m;	// update local storage
+		$('#current').val(n);
+
+		window.localStorage.setItem('TALLY_N', 0);
+		
+		publish('live', { eventid:eventid,   placeid:placeid, n:n, ts:Date.now() } );
+	}
+
+	var pubnub 		= null;
+
+	var TALLY_PUBNUB_S_KEY 	= window.localStorage.getItem('TALLY_PUBNUB_S_KEY');
+	var TALLY_PUBNUB_P_KEY 	= window.localStorage.getItem('TALLY_PUBNUB_P_KEY');
+
+	if ( (TALLY_PUBNUB_S_KEY != null) & (TALLY_PUBNUB_P_KEY != null))
+	{
+		pubnub = new PubNub(
+		{
+        		subscribeKey: 	TALLY_PUBNUB_S_KEY, 	
+	        	publishKey: 	TALLY_PUBNUB_P_KEY, 	
+		});
+	}
+
+	$('#pubnubkey').on('change', function()
+	{
+		// add smth for iOS ?
+		var pubnub_key 	 	= $('#pubnubkey').val();	//; // to draw from input
+
+		var TALLY_PUBNUB_S_KEY 	= pubnub_key.split('#')[0];
+		var TALLY_PUBNUB_P_KEY  = pubnub_key.split('#')[1];
+
+		window.localStorage.setItem('TALLY_PUBNUB_S_KEY', TALLY_PUBNUB_S_KEY);
+		window.localStorage.setItem('TALLY_PUBNUB_P_KEY', TALLY_PUBNUB_P_KEY);
+
+		var pubnub 		= new PubNub(
+		{
+        		subscribeKey: 	subscribeKey, 	
+	        	publishKey: 	publishKey, 	
+		});
+	})
+
+	$('#eventid').on('change', function()
+	{
+		eventid = $('#eventid').val();	window.localStorage.setItem('TALLY_EVENTID', eventid); 
+		pubnub.subscribe(
+		{
+			channels: [eventid + '#live']
+		});
+
+		load_history();
+	});
+
+	$('#placeid').on('change', function()
+	{
+		placeid = $('#placeid').val();	window.localStorage.setItem('TALLY_PLACEID', placeid); 
+	});
+
+	pubnub.addListener(
+	{
+		status: 	function(statusEvent) {},
+		message: 	function(m) 
+		{
+			console.log(m)
+			// s'il y en a +sieurs, ne prendre que le dernier
+			// update tableau
+		}
+	});
+		
+	pubnub.subscribe(
+	{
+		channels: [eventid + '#live']
+	});
+
+	load_history();
+
+	function load_history()
+	{
+		getAllMessages(0);
+
+		function getAllMessages(timetoken) 
+		{
+			pubnub.history(
+			{
+        			channel: eventid + '#live',
+				stringifiedTimeToken: true, 
+				// reverse: true, // comment for debug
+				//count: 	100,
+				start:	timetoken
+			},
+			function (status, response) 
+			{
+				if (!status.error)
+				{
+					var rm 		= response.messages;	
+				        var start 	= response.startTimeToken;
+				        var end 	= response.endTimeToken;
+	
+					console.log('FETCH HISTORY: ', rm, rm.length, start- 1.5653e16, end- 1.5653e16)
+	
+					if (rm != "undefined" && rm.length > 0)
+					{		
+						// grouper par placeid et prendre le dernier (temporel)
+			
+						for (var i=rm.length-1; i>=1; --i)
+						{
+							if (rm.entry.eventid != eventid) continue;
+
+							var placeid = rm[i].entry.placeid;
+
+							if (ns[placeid] == null)
+							{
+								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].entry.ts};
+							}
+							else if (ns[placeid].ts < rm[i].entry.ts )
+							{
+								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].entry.ts};
+							}
+						}	
+					} // status.error
+				}// function (status, message)
+			); // pubnub.history
+		} // getAllMessages
+	}
+
+	/*Offline.on('up', function()
+	{
+		reload_history();
+	})*/
+	// END PUBNUB EVENTS
+
+	function publish(channel, message)
+	{
+		pubnub.publish({ message:message, channel: eventid + '#'+channel,storeInHistory: true, ttl:	24}, function (status, response) { });
+	}
+
+	</script>
+	
+</html>
+
