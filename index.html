@@ -175,8 +175,8 @@
 				}
 
 				ns[placeid] 	= {n:m.message.n, ts:m.timetoken}
-				var dt   	= new Date (ns[placeid].ts/1000)
-console.log(dt)
+				var dt   	= new Date (ns[placeid].ts/10000)
+
 				$('#n_'+placeid).text(ns[placeid].n)
 				$('#dt_'+placeid).text(dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString())
 
@@ -237,7 +237,7 @@ console.log(dt)
 						{
 							if (ns.hasOwnProperty(placeid))
 							{
-			       					var dt = new Date (ns[placeid].ts/1000)
+			       					var dt = new Date (ns[placeid].ts/10000)
 									     
 								html += '<tr><td>' + placeid + '</td><td id="n_'+placeid+'">' + ns[placeid].n + '</td><td id="dt_'+placeid+'">' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString() + '</td></tr>';
 							}
