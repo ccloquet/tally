@@ -93,7 +93,7 @@
 		n  	= m;	// update local storage
 		$('#current').text(n);
 
-		window.localStorage.setItem('TALLY_N', 0);
+		window.localStorage.setItem('TALLY_N', n);
 		
 		publish('live', { eventid:eventid,   placeid:placeid, n:n} );
 	}
