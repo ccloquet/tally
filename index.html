@@ -178,8 +178,10 @@
 	
 					console.log('FETCH HISTORY: ', rm, rm.length, start- 1.5653e16, end- 1.5653e16)
 	
+					console.log('T')
 					if ((rm != "undefined") & (rm.length > 0))
 					{		
+						console.log('W')
 						// grouper par placeid et prendre le dernier (temporel)
 			
 						for (var i=rm.length-1; i>=1; --i)
@@ -202,6 +204,16 @@
 								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].timetoken};
 							}
 						}	
+						console.log(ns)
+
+						for (var placeid in ns)
+						{
+							if (ns.hasOwnProperty(my_ns))
+							{
+								console.log('<tr><td>' + placeid + '</td><td>' + ns[placeid].n + '</td></tr>')
+							}
+						}
+						}
 			       		  }
 					} // status.error
 				}// function (status, message)
