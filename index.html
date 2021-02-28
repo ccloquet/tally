@@ -13,8 +13,14 @@
 
 <body scroll="no" style="overflow: hidden; overscroll-behavior: none; background:#64AAB4; font-family:'Roboto thin', 'Lucida Sans', 'Arial'">
 	<style>
+		div
+		{
+			margin-top:1em;
+		}
 		.btn 
 		{
+			margin:2em;
+			border: 1px solid black;
 			font-size:200%;
 		}
 	</style>
@@ -197,7 +203,6 @@
 								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].timetoken};
 							}
 						}	
-						console.log(ns)
 
 						var html = '<table>';
 						for (var placeid in ns)
@@ -205,7 +210,7 @@
 							if (ns.hasOwnProperty(placeid))
 							{
 			       					var dt = new Date (ns[placeid].ts/1000)
-							       	html += '<tr ts='+ns[placeid].ts+'><td>' + placeid + '</td><td>' + ns[placeid].n + '</td><td>' + dt + '</td></tr>';
+							       	html += '<tr pi='+placeid+' ts='+ns[placeid].ts+'><td>' + placeid + '</td><td>' + ns[placeid].n + '</td><td>' + dt + '</td></tr>';
 							}
 						}
 						html += '</table>';
