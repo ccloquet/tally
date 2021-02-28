@@ -13,6 +13,10 @@
 
 <body scroll="no" style="overflow: hidden; overscroll-behavior: none; background:#64AAB4; font-family:'Roboto thin', 'Lucida Sans', 'Arial'">
 	<style>
+		table
+		{
+			 border-collapse:collapse;
+		}
 		div
 		{
 			margin-top:1em;
@@ -29,9 +33,9 @@
 		}
 	</style>
 	<div>
-		<div class='btn' id='switch_view'>switch dashboard <-> counter</div><br>
-		pubnub key (later to be scanned by QR code): <input id='pubnubkey'> <br>
-		event id (any alphanumeric string - eg: werchter2020): <input id='eventid'> <br>
+		<div class='btn' id='switch_view' style='display:inline'>switch dashboard <-> counter</div><br>
+		pubnub key (later via QR code?): <input id='pubnubkey'> <br>
+		event id (eg: werchter2020): <input id='eventid'> <br>
 
 		<div id="page1" 	style="display:block">
 			place id (any alphanumeric string - eg : gate1): <input id='placeid'> <br><br>
@@ -172,7 +176,7 @@
 				var dt   	= new Date (ns[placeid].ts/1000)
 
 				$('#n_'+placeid).text(ns[placeid].n)
-				$('#dt_'+placeid).text(dt)
+				$('#dt_'+placeid).text(dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString())
 
 				//quid si n'arrive pas dans le bon ordre ? - il faudrait garder trace de la liste, et prendre le max....
 				// mais moins critique que pour dessin
@@ -226,13 +230,14 @@
 						}	
 
 						var html = '<table border=1 id="dashboard">';
-						html += '<tr><td>place</td><td>n</td><td>update</td></tr>'
+						html += '<tr><td><b>place</b></td><td><b>n</b></td><td><b>update</b></td></tr>'
 						for (var placeid in ns)
 						{
 							if (ns.hasOwnProperty(placeid))
 							{
 			       					var dt = new Date (ns[placeid].ts/1000)
-								html += '<tr><td>' + placeid + '</td><td id="n_'+placeid+'">' + ns[placeid].n + '</td><td id="dt_'+placeid+'">' + dt + '</td></tr>';
+									     
+								html += '<tr><td>' + placeid + '</td><td id="n_'+placeid+'">' + ns[placeid].n + '</td><td id="dt_'+placeid+'">' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString() + '</td></tr>';
 							}
 						}
 						html += '</table>';
