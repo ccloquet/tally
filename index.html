@@ -184,7 +184,6 @@
 			
 						for (var i=rm.length-1; i>=0; --i)
 						{
-							console.log(rm[i])
 							if (rm[i].entry.eventid != eventid) continue;
 
 							var placeid = rm[i].entry.placeid;
@@ -206,7 +205,7 @@
 							if (ns.hasOwnProperty(placeid))
 							{
 			       					var dt = new Date (ns[placeid].ts)
-							       	table += '<tr ts='+ns[placeid].ts+'><td>' + placeid + '</td><td>' + ns[placeid].n + '</td><td>' + dt + '</td></tr>';
+							       	html += '<tr ts='+ns[placeid].ts+'><td>' + placeid + '</td><td>' + ns[placeid].n + '</td><td>' + dt + '</td></tr>';
 							}
 						}
 						html += '</table>';
