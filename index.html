@@ -19,9 +19,9 @@
 		}
 		.btn 
 		{
-			margin:2em;
-			border: 1px solid black;
-			font-size:200%;
+			padding:	2em;
+			border: 	1px solid black;
+			font-size:	200%;
 		}
 	</style>
 	<div>
@@ -33,9 +33,11 @@
 			place id (any alphanumeric string - eg : gate1): <input id='placeid'> <br>
 
 			current number: <span id='current'></span>
-			<div class='btn' id='plus'>+</div>
+
+			<div class='btn' id='zero'>0</div>			
 			<div class='btn' id='minus'>-</div>
-			<div class='btn' id='zero'>0</div>
+			<div class='btn' id='plus'>+</div>
+
 		</div>
 		<div id="page2" 	style="display:none; text-align:center">
 			table (placeid, number, last update (human readable), last update (ms - hidden))
@@ -220,6 +222,7 @@
 						}	
 
 						var html = '<table border=1 id="dashboard">';
+						html += '<tr><td>place</td><td>n</td><td>update</td></tr>'
 						for (var placeid in ns)
 						{
 							if (ns.hasOwnProperty(placeid))
