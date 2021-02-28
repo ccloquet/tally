@@ -94,11 +94,9 @@
 
 	if ( (TALLY_PUBNUB_S_KEY != null) & (TALLY_PUBNUB_P_KEY != null))
 	{
-		pubnub = new PubNub(
-		{
-        		subscribeKey: 	TALLY_PUBNUB_S_KEY, 	
-	        	publishKey: 	TALLY_PUBNUB_P_KEY, 	
-		});
+		pubnub_initialize(TALLY_PUBNUB_S_KEY, TALLY_PUBNUB_P_KEY);
+
+		if (eventid ! null) pubnub.subscribe({channels: [eventid + '#live']});
 	}
 
 	$('#pubnubkey').on('change', function()
@@ -112,20 +110,14 @@
 		window.localStorage.setItem('TALLY_PUBNUB_S_KEY', TALLY_PUBNUB_S_KEY);
 		window.localStorage.setItem('TALLY_PUBNUB_P_KEY', TALLY_PUBNUB_P_KEY);
 
-		var pubnub 		= new PubNub(
-		{
-        		subscribeKey: 	subscribeKey, 	
-	        	publishKey: 	publishKey, 	
-		});
+		pubnub_initialize(subscribeKey, publishKey)
 	})
 
 	$('#eventid').on('change', function()
 	{
 		eventid = $('#eventid').val();	window.localStorage.setItem('TALLY_EVENTID', eventid); 
-		pubnub.subscribe(
-		{
-			channels: [eventid + '#live']
-		});
+
+		pubnub.subscribe({channels: [eventid + '#live']});
 
 		load_history();
 	});
@@ -135,22 +127,27 @@
 		placeid = $('#placeid').val();	window.localStorage.setItem('TALLY_PLACEID', placeid); 
 	});
 
-	pubnub.addListener(
+	function pubnub_initialize(subscribeKey, publishKey)
 	{
-		status: 	function(statusEvent) {},
-		message: 	function(m) 
+		pubnub = new PubNub(
 		{
-			console.log(m)
-			// s'il y en a +sieurs, ne prendre que le dernier
-			// update tableau
-		}
-	});
-		
-	pubnub.subscribe(
-	{
-		channels: [eventid + '#live']
-	});
+        		subscribeKey: 	subscribeKey, 	
+	        	publishKey: 	publishKey, 	
+		});
 
+		pubnub.addListener(
+		{
+			status: 	function(statusEvent) {},
+			message: 	function(m) 
+			{
+				console.log(m)
+				// s'il y en a +sieurs, ne prendre que le dernier
+				// update tableau
+			}
+		});
+
+	}
+		
 	load_history();
 
 	function load_history()
