@@ -32,12 +32,12 @@
 		<div id="page1" 	style="display:block">
 			place id (any alphanumeric string - eg : gate1): <input id='placeid'> <br>
 
-			<div id='current'></div>
+			current number: <span id='current'></span>
 			<div class='btn' id='plus'>+</div>
 			<div class='btn' id='minus'>-</div>
 			<div class='btn' id='zero'>0</div>
 		</div>
-		<div id="page2" 	style="display:none">
+		<div id="page2" 	style="display:none; text-align:center">
 			table (placeid, number, last update (human readable), last update (ms - hidden))
 		</div>
 	</div>
@@ -91,7 +91,7 @@
 	function publish_number(m)	
 	{
 		n  	= m;	// update local storage
-		$('#current').val(n);
+		$('#current').txt(n);
 
 		window.localStorage.setItem('TALLY_N', 0);
 		
@@ -153,8 +153,18 @@
 			status: 	function(statusEvent) {},
 			message: 	function(m) 
 			{
-				console.log(m)
-				// s'il y en a +sieurs, ne prendre que le dernier
+				var placeid = m.message.placeid
+			
+				//console.log(m)
+				
+				ns[placeid] = {n:m.message.n, ts:m.timetoken}
+				var dt   = new Date (ns[placeid].ts/1000)
+
+				$('#n_'+placeid).text(ns[placeid].n)
+				$('#dt_'+placeid).text(dt)
+
+				//quid si n'arrive pas dans le bon ordre ? - il faudrait garder trace de la liste, et prendre le max....
+				// mais moins critique que pour dessin
 				// update tableau
 			}
 		});
@@ -204,13 +214,13 @@
 							}
 						}	
 
-						var html = '<table>';
+						var html = '<table border=1 id='dashboard'>';
 						for (var placeid in ns)
 						{
 							if (ns.hasOwnProperty(placeid))
 							{
 			       					var dt = new Date (ns[placeid].ts/1000)
-							       	html += '<tr pi='+placeid+' ts='+ns[placeid].ts+'><td>' + placeid + '</td><td>' + ns[placeid].n + '</td><td>' + dt + '</td></tr>';
+								html += '<tr><td>' + placeid + '</td><td id="n_'+placeid+'">' + ns[placeid].n + '</td><td id="dt_'+placeid+'">' + dt + '</td></tr>';
 							}
 						}
 						html += '</table>';
