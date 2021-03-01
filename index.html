@@ -283,13 +283,15 @@
 						
 			       			$('#page2').html(html)
 
-						for (var placeid in ns)
-						{
-							if (ns.hasOwnProperty(placeid))
+						setTimeout(function(){
+							for (var placeid in ns)
 							{
-								$('#spark_'+placeid).sparkline(ns[placeid].n, { xvalues: ns[placeid].ts});
+								if (ns.hasOwnProperty(placeid))
+								{
+									$('#spark_'+placeid).sparkline(ns[placeid].n, { xvalues: ns[placeid].ts});
+								}
 							}
-						}
+						}, 400)
 			       		  }
 					} // status.error
 				}// function (status, message)
