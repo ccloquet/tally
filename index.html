@@ -270,7 +270,7 @@
 						{
 							if (ns.hasOwnProperty(placeid))
 							{
-								var my_ts    = Math.max.apply(Math, ns['gate1'].ts);
+								var my_ts    = Math.max.apply(Math, ns[placeid].ts);
 								var ts_idx   = ns[placeid].ts.indexOf(my_ts);
 								var my_n     = ns[placeid].n[ts_idx];
 
@@ -285,7 +285,10 @@
 
 						for (var placeid in ns)
 						{
-							$('#spark_'+placeid).sparkline(ns[placeid].n, { xvalues: ns[placeid].ts});
+							if (ns.hasOwnProperty(placeid))
+							{
+								$('#spark_'+placeid).sparkline(ns[placeid].n, { xvalues: ns[placeid].ts});
+							}
 						}
 			       		  }
 					} // status.error
