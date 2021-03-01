@@ -217,6 +217,8 @@
 
 				$('#n_'+placeid).text(my_n)
 				$('#dt_'+placeid).text(dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString())
+
+				$('#spark_'+placeid).sparkline(ns[placeid].n, { xvalues: ns[placeid].ts});
 			}
 		});
 	}
