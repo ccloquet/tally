@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="js/plus.css">
 </head>
 
-<body scroll="no" style="overflow: hidden; overscroll-behavior: none; background:#64AAB4; font-family:'Roboto thin', 'Lucida Sans', 'Arial'">
+<body style="margin:0; padding:0; background:#171717; color:#767676; font-family:'Roboto thin', 'Lucida Sans', 'Arial'">
 	<style>
 		table
 		{
@@ -27,20 +27,35 @@
 		}
 		.btn_pm
 		{
+			color:		black;
 			font-size:	200%;
 			padding:	1em;
 			margin-top:	5px;
+			margin-left:	30px;
+			margin-right:	30px;
+			border-radius:	5px;
+			background:	#d3a411;
+		}
+		input
+		{
+			border-top:	0;
+			border-left:	0;
+			border-right:	0;
+			background:	transparent;
+			color:		lightgray;
+			text-align:	center;
 		}
 	</style>
 	<div>
-		<div class='btn' id='switch_view' style='display:inline'>switch dashboard <-> counter</div><br><br>
-		pubnub key (later via QR code?): <input id='pubnubkey'> <br>
-		event id (eg: werchter2020): <input id='eventid'> <br>
+		<div class='btn' id='switch_view' style='display:inline-block; border:0; position:fixed; top:10px; right:10px; margin:0; font-size:200%'><i id='btn_dashboard' class='fa fa-dashboard'></i><i id='btn_plus' style='display:none' class='fa fa-plus-square'></i></div>
+		<div class='btn' id='config_view' style='display:inline-block; border:0; position:fixed; top:10px; left:10px; margin:0; font-size:200%'><i class='fa fa-cog'></i></div>
+		<div id='config' style='display:none'>pubnub key (later via QR code?): <input id='pubnubkey'></div>
+		<input id='eventid' placeholder='event id (eg: werchter2020)'> <br>
 
 		<div id="page1" 	style="display:block">
-			place id (any alphanumeric string - eg : gate1): <input id='placeid'> <br><br>
+			<input id='placeid' placeholder='place id (eg: gate1)'> <br><br>
 
-			current number: <span id='current'></span> <br>
+			<span id='current' style='border:1px solid lightgray; border-radius:5px; width:5em; display:block;margin:auto;padding:5px;font-family:Courier; font-weight:bold;test-align:center; font-size:150%'></span> <br>
 
 			<div class='btn btn_pm' id='zero'>0</div>			
 			<div class='btn btn_pm' id='minus'>-</div>
@@ -67,6 +82,7 @@
 	$('#minus').on(		'click', 	function ()	{ publish_number(--n);	});
 	$('#zero').on(		'click', 	function ()	{ publish_number(0);	});
 	$('#switch_view').on(	'click', 	switch_view);
+	$('#config_view').on(	'click', 	config_view);
 
 	var myver		= '0.1';
 
@@ -79,10 +95,18 @@
 	if (LOCAL_TALLY_EVENTID != null) { eventid = LOCAL_TALLY_EVENTID; $('#eventid').val(LOCAL_TALLY_EVENTID); };
 	if (LOCAL_TALLY_PLACEID != null) { placeid = LOCAL_TALLY_PLACEID; $('#placeid').val(LOCAL_TALLY_PLACEID); };
 
+	function config_view()
+	{
+		$('#config').toggle();
+	}
+
 	function switch_view()
 	{
 		$('#page1').toggle();
 		$('#page2').toggle();
+
+		$('#btn_dashboard').toggle();
+		$('#btn_plus').toggle();
 	}
 
 	var ns = {};
