@@ -218,7 +218,7 @@
 				$('#n_'+placeid).text(my_n)
 				$('#dt_'+placeid).text(dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString())
 
-				$('#spark_'+placeid).sparkline(ns[placeid].n);	// , { xvalues: ns[placeid].ts}
+				$('#spark_'+placeid).sparkline(ns[placeid].n,{ xvalues: ns[placeid].ts})
 			}
 		});
 	}
@@ -290,7 +290,7 @@
 							{
 								if (ns.hasOwnProperty(placeid))
 								{
-									$('#spark_'+placeid).sparkline(ns[placeid].n); // , { xvalues: ns[placeid].ts}
+									$('#spark_'+placeid).sparkline(ns[placeid].n, { xvalues: ns[placeid].ts})
 								}
 							}
 						}, 1000)
