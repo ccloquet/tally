@@ -198,7 +198,7 @@
 				
 				if (ns[placeid] == null)
 				{
-					$('#dashboard tr:last').after('<tr><td>' + placeid + '</td><td id="n_'+placeid+'">0</td><td id="dt_'+placeid+'"></td></tr>')
+					$('#dashboard tr:last').after('<tr><td>' + placeid + '</td><td id="n_'+placeid+'">0</td><td id="dt_'+placeid+'"></td><td id="spark_'+placeid+'"></td></tr>')
 				}
 
 				ns[placeid] 	= {n:m.message.n, ts:m.timetoken}
@@ -259,14 +259,14 @@
 						}	
 
 						var html = '<table border=1 id="dashboard">';
-						html += '<tr><td><b>place</b></td><td><b>n</b></td><td><b>update</b></td></tr>'
+						html += '<tr><td><b>place</b></td><td><b>n</b></td><td><b>update</b></td><td></td></tr>'
 						for (var placeid in ns)
 						{
 							if (ns.hasOwnProperty(placeid))
 							{
 			       					var dt = new Date (ns[placeid].ts/10000)
 									     
-								html += '<tr><td>' + placeid + '</td><td id="n_'+placeid+'">' + ns[placeid].n + '</td><td id="dt_'+placeid+'">' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString() + '</td></tr>';
+								html += '<tr><td>' + placeid + '</td><td id="n_'+placeid+'">' + ns[placeid].n + '</td><td id="dt_'+placeid+'">' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString() + '</td><td id="spark_'+placeid+'"></td></tr>';
 							}
 						}
 						html += '</table>';
