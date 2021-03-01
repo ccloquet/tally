@@ -17,6 +17,10 @@
 		{
 			 border-collapse:collapse;
 		}
+		td
+		{
+			padding:3px;
+		}
 		div
 		{
 			margin-top:1em;
@@ -49,7 +53,7 @@
 	<div>
 		<div class='btn' id='switch_view' style='display:inline-block; border:0; position:fixed; top:10px; right:10px; margin:0; font-size:200%'><i id='btn_dashboard' class='fa fa-dashboard'></i><i id='btn_plus' style='display:none' class='fa fa-plus-square'></i></div>
 		<div class='btn' id='config_view' style='display:inline-block; border:0; position:fixed; top:10px; left:10px; margin:0; font-size:200%'><i class='fa fa-cog'></i></div>
-		<div id='config' style='display:none'>pubnub key (later via QR code?): <input id='pubnubkey'></div>
+		<div id='config' style='display:none'><br>pubnub key: <input id='pubnubkey'> (later via QR code?)<br><br></div>
 		<input id='eventid' placeholder='event id (eg: werchter2020)'> <br>
 
 		<div id="page1" 	style="display:block">
@@ -74,7 +78,6 @@
 <script	type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="						  	crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/offline-0.7.14/offline.min.js"></script>
 <script type="text/javascript" src="js/download2.js"></script>
-<script type="text/javascript" src="js/push.js-1.0.9/bin/push.js"></script>
 
 <script>
 
