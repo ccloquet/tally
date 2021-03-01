@@ -205,8 +205,8 @@
 					ns[placeid] 	= {n:[], ts:[]}
 				}
 
-				var my_n  = m.timetoken;
-				var my_ts = m.message.n;	// instead : could be max (cf history) - 
+				var my_ts  = parseInt(m.timetoken);
+				var my_n   = m.message.n;	// instead : could be max (cf history) - 
 				//quid si n'arrive pas dans le bon ordre ? - il faudrait garder trace de la liste, et prendre le max....
 				// mais moins critique que pour dessin
 
@@ -261,7 +261,7 @@
 							}
 							
 							ns[placeid].n.push(rm[i].entry.n);
-							ns[placeid].ts.push(rm[i].timetoken);
+							ns[placeid].ts.push(parseInt(rm[i].timetoken));
 						}	
 
 						var html = '<table border=1 id="dashboard">';
@@ -271,8 +271,8 @@
 							if (ns.hasOwnProperty(placeid))
 							{
 								var my_ts    = Math.max(ns[placeid].ts);
-								var ts_idx = ns[placeid].ts.indexOf(my_ts);
-								var my_n  = ns[placeid].n[ts_idx];
+								var ts_idx   = ns[placeid].ts.indexOf(my_ts);
+								var my_n     = ns[placeid].n[ts_idx];
 
 			       					var dt = new Date (my_ts/10000)
 									     
