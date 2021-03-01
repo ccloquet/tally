@@ -61,9 +61,11 @@
 
 			<span id='current' style='border:1px solid lightgray; border-radius:5px; width:5em; display:block;margin:auto;padding:5px;font-family:Courier; font-weight:bold;test-align:center; font-size:150%'></span> <br>
 
-			<div class='btn btn_pm' id='zero'>0</div>			
-			<div class='btn btn_pm' id='minus'>-</div>
-			<div class='btn btn_pm' id='plus'>+</div>
+			<div style='position:fixed; bottom:20px; left:0px; right:0px'>
+				<div class='btn btn_pm' id='zero'>0</div>			
+				<div class='btn btn_pm' id='minus'>-</div>
+				<div class='btn btn_pm' id='plus'>+</div>
+			</div>
 
 		</div>
 		<div id="page2" 	style="display:none; text-align:-webkit-center">
@@ -200,17 +202,21 @@
 				if (ns[placeid] == null)
 				{
 					$('#dashboard tr:last').after('<tr><td>' + placeid + '</td><td id="n_'+placeid+'">0</td><td id="dt_'+placeid+'"></td><td id="spark_'+placeid+'"></td></tr>')
+					ns[placeid] 	= {n:[], ts:[]}
 				}
 
-				ns[placeid] 	= {n:m.message.n, ts:m.timetoken}
-				var dt   	= new Date (ns[placeid].ts/10000)
-
-				$('#n_'+placeid).text(ns[placeid].n)
-				$('#dt_'+placeid).text(dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString())
-
+				var my_n  = m.timetoken;
+				var my_ts = m.message.n;	// instead : could be max (cf history) - 
 				//quid si n'arrive pas dans le bon ordre ? - il faudrait garder trace de la liste, et prendre le max....
 				// mais moins critique que pour dessin
-				// update tableau
+
+				ns[placeid].n.push(my_n);
+				ns[placeid].ts.push(my_ts)
+
+				var dt    = new Date (my_ts/10000)
+
+				$('#n_'+placeid).text(my_n)
+				$('#dt_'+placeid).text(dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString())
 			}
 		});
 	}
@@ -251,12 +257,11 @@
 
 							if (ns[placeid] == null)
 							{
-								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].timetoken};
+								ns[placeid] = {n:[], ts:[]};
 							}
-							else if (ns[placeid].ts < rm[i].timetoken )
-							{
-								ns[placeid] = {n:rm[i].entry.n, ts:rm[i].timetoken};
-							}
+							
+							ns[placeid].n.push(rm[i].entry.n);
+							ns[placeid].ts.push(rm[i].timetoken);
 						}	
 
 						var html = '<table border=1 id="dashboard">';
@@ -265,13 +270,23 @@
 						{
 							if (ns.hasOwnProperty(placeid))
 							{
-			       					var dt = new Date (ns[placeid].ts/10000)
+								var my_ts    = Math.max(ns[placeid].ts);
+								var ts_idx = ns[placeid].ts.indexOf(my_ts);
+								var my_n  = ns[placeid].n[idx];
+
+			       					var dt = new Date (my_ts/10000)
 									     
-								html += '<tr><td>' + placeid + '</td><td id="n_'+placeid+'">' + ns[placeid].n + '</td><td id="dt_'+placeid+'">' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString() + '</td><td id="spark_'+placeid+'"></td></tr>';
+								html += '<tr><td>' + placeid + '</td><td id="n_'+placeid+'">' + my_n + '</td><td id="dt_'+placeid+'">' + dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString() + '</td><td id="spark_'+placeid+'"></td></tr>';
 							}
 						}
 						html += '</table>';
+						
 			       			$('#page2').html(html)
+
+						for (var placeid in ns)
+						{
+							$('#spark_'+placeid).sparkline(ns[placeid].n, { xvalues: ns[placeid].ts});
+						}
 			       		  }
 					} // status.error
 				}// function (status, message)
